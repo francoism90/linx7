@@ -5,8 +5,8 @@
 pkgbase=linux-mainline               # Build stock -ARCH kernel
 #pkgbase=linux-custom       # Build kernel with a different name
 _srcname=linux-4.0
-_patchname=patch-4.1-rc5
-pkgver=4.1rc5
+_patchname=patch-4.1-rc8
+pkgver=4.1rc8
 pkgrel=1
 arch=('i686' 'x86_64')
 url="http://www.hurrdurr.org/"
@@ -27,9 +27,9 @@ source=("https://www.kernel.org/pub/linux/kernel/v4.x/${_srcname}.tar.xz"
         'sst-acpi-address.patch'
         )
 sha256sums=('0f2f7d44979bc8f71c4fc5d3308c03499c26a824dd311fdf6eef4dee0d7d5991'
-            'e34221ec36530898c6bff7bed57b64cd26b8c7359da82c88967dd479f809f5b8'
-            'fbcebfb2aaea8de6829e82eb792a337aa4d812daf8f225e088390b4e415d8148'
-            'fbcebfb2aaea8de6829e82eb792a337aa4d812daf8f225e088390b4e415d8148'
+            'dad6572b2e806bf0efbd6920c2a37aa3ba0349225eab85f7dcbc2de34399ec99'
+            '1af5838b65aed508435a9f149f70d528144e924e8272b83e610eecefda900194'
+            '1af5838b65aed508435a9f149f70d528144e924e8272b83e610eecefda900194'
             'f0d90e756f14533ee67afda280500511a62465b4f76adcc5effa95a40045179c'
             '1256b241cd477b265a3c2d64bdc19ffe3c9bbcee82ea3994c590c2c76e767d99'
             'd56c0806c92aed73a9d86384df404d4b54907f4b3e77d0c6f79a254b1f804378'
@@ -55,12 +55,11 @@ prepare() {
   # (relevant patch sent upstream: https://lkml.org/lkml/2011/7/26/227)
   patch -p1 -i "${srcdir}/change-default-console-loglevel.patch"
   
-  # for linx7 tablet
+  # custom patches
   patch -p1 -i "${srcdir}/rpmb-init-fix.patch"
   patch -p1 -i "${srcdir}/sdhci-pm.patch"
   patch -p1 -i "${srcdir}/sst-acpi-address.patch"
-  
-  # config
+
   if [ "${CARCH}" = "x86_64" ]; then
     cat "${srcdir}/config.x86_64" > ./.config
   else
@@ -227,29 +226,29 @@ _package-headers() {
   # in reference to:
   # http://bugs.archlinux.org/task/9912
   #mkdir -p "${pkgdir}/usr/lib/modules/${_kernver}/build/drivers/media/dvb-core"
-  #cp drivers/media/dvb-core/*.h #"${pkgdir}/usr/lib/modules/${_kernver}/build/drivers/media/dvb-core/"
+  #cp drivers/media/dvb-core/*.h "${pkgdir}/usr/lib/modules/${_kernver}/build/drivers/media/dvb-core/"
   # and...
   # http://bugs.archlinux.org/task/11194
   #mkdir -p "${pkgdir}/usr/lib/modules/${_kernver}/build/include/config/dvb/"
-  #cp include/config/dvb/*.h #"${pkgdir}/usr/lib/modules/${_kernver}/build/include/config/dvb/"
+  #cp include/config/dvb/*.h "${pkgdir}/usr/lib/modules/${_kernver}/build/include/config/dvb/"
 
   # add dvb headers for http://mcentral.de/hg/~mrec/em28xx-new
   # in reference to:
   # http://bugs.archlinux.org/task/13146
   #mkdir -p "${pkgdir}/usr/lib/modules/${_kernver}/build/drivers/media/dvb-frontends/"
-  #cp drivers/media/dvb-frontends/lgdt330x.h #"${pkgdir}/usr/lib/modules/${_kernver}/build/drivers/media/dvb-frontends/"
+  #cp drivers/media/dvb-frontends/lgdt330x.h "${pkgdir}/usr/lib/modules/${_kernver}/build/drivers/media/dvb-frontends/"
   #mkdir -p "${pkgdir}/usr/lib/modules/${_kernver}/build/drivers/media/i2c/"
-  #cp drivers/media/i2c/msp3400-driver.h #"${pkgdir}/usr/lib/modules/${_kernver}/build/drivers/media/i2c/"
+  #cp drivers/media/i2c/msp3400-driver.h "${pkgdir}/usr/lib/modules/${_kernver}/build/drivers/media/i2c/"
 
   # add dvb headers
   # in reference to:
   # http://bugs.archlinux.org/task/20402
   #mkdir -p "${pkgdir}/usr/lib/modules/${_kernver}/build/drivers/media/usb/dvb-usb"
-  #cp drivers/media/usb/dvb-usb/*.h #"${pkgdir}/usr/lib/modules/${_kernver}/build/drivers/media/usb/dvb-usb/"
+  #cp drivers/media/usb/dvb-usb/*.h "${pkgdir}/usr/lib/modules/${_kernver}/build/drivers/media/usb/dvb-usb/"
   #mkdir -p "${pkgdir}/usr/lib/modules/${_kernver}/build/drivers/media/dvb-frontends"
-  #cp drivers/media/dvb-frontends/*.h #"${pkgdir}/usr/lib/modules/${_kernver}/build/drivers/media/dvb-frontends/"
+  #cp drivers/media/dvb-frontends/*.h "${pkgdir}/usr/lib/modules/${_kernver}/build/drivers/media/dvb-frontends/"
   #mkdir -p "${pkgdir}/usr/lib/modules/${_kernver}/build/drivers/media/tuners"
-  #cp drivers/media/tuners/*.h #"${pkgdir}/usr/lib/modules/${_kernver}/build/drivers/media/tuners/"
+  #cp drivers/media/tuners/*.h "${pkgdir}/usr/lib/modules/${_kernver}/build/drivers/media/tuners/"
 
   # add xfs and shmem for aufs building
   mkdir -p "${pkgdir}/usr/lib/modules/${_kernver}/build/fs/xfs"
