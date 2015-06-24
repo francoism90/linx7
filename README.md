@@ -5,5 +5,5 @@ Linx7 Tablet - Arch Linux
 https://github.com/hadess/rtl8723bs
 
 ## Patch Sources
-* https://dev-nell.com/rpmb-emmc-errors-under-linux.html
+* [rpmb-init-fix.patch](https://dev-nell.com/rpmb-emmc-errors-under-linux.html)
 * Ubuntu Kernel (git)
