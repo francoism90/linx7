@@ -6,4 +6,4 @@ https://github.com/hadess/rtl8723bs
 
 ## Patch Sources
 * [rpmb-init-fix.patch](https://dev-nell.com/rpmb-emmc-errors-under-linux.html)
-* Ubuntu Kernel (git)
+* [sdhci-pm.patch](https://github.com/AdamWill/baytrail-m/blob/master/kernel/MANIFEST)
