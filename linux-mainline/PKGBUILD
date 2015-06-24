@@ -22,7 +22,7 @@ source=("https://www.kernel.org/pub/linux/kernel/v4.x/${_srcname}.tar.xz"
         # standard config files for mkinitcpio ramdisk
         'linux.preset'
         'change-default-console-loglevel.patch'
-		'rpmb-init-fix.patch'
+	'rpmb-init-fix.patch'
         'sdhci-pm.patch'
         'sst-acpi-address.patch'
         )
@@ -58,7 +58,7 @@ prepare() {
   # custom patches
   patch -p1 -i "${srcdir}/rpmb-init-fix.patch"
   patch -p1 -i "${srcdir}/sdhci-pm.patch"
-  patch -p1 -i "${srcdir}/sst-acpi-address.patch"
+  #patch -p1 -i "${srcdir}/sst-acpi-address.patch"
 
   if [ "${CARCH}" = "x86_64" ]; then
     cat "${srcdir}/config.x86_64" > ./.config
