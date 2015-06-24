@@ -1,5 +1,6 @@
 # linx7
 Linx7 Tablet - Arch Linux
+
 Use at own risk, no warrants whatsoever.
 
 ## Modules
