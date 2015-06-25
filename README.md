@@ -3,6 +3,10 @@ Linx7 Tablet - Arch Linux
 
 Use at own risk, no warrants whatsoever.
 
+## Kernel
+* Linux 4.1 Kernel with a minimal .config ([AUR](https://aur4.archlinux.org/packages/linux-mainline/))
+* It is recommended to configure the kernel with `make menuconfig` (or other prefered method)
+
 ## Modules
 * [WiFi](https://github.com/hadess/rtl8723bs)
 * [Touchscreen](https://github.com/hadess/gt9xx)
