@@ -13,7 +13,7 @@ Use at own risk, no warrants whatsoever.
 
 ## Patch Sources
 * [rpmb-init-fix.patch](https://dev-nell.com/rpmb-emmc-errors-under-linux.html)
-* [sdhci-pm.patch](https://github.com/AdamWill/baytrail-m/blob/master/kernel/MANIFEST)
+* [sdhci-pm.patch](http://thread.gmane.org/gmane.linux.kernel.mmc/25081/focus=25087)
 
 ## Bug Reports
 * [byt-rt5640](https://bugzilla.kernel.org/show_bug.cgi?id=86581) (Audio)
