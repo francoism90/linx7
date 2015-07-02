@@ -1,7 +1,7 @@
 # linx7
 Linx7 Tablet - Arch Linux
 
-Use at own risk, no warrants whatsoever.
+Use at own risk, no warranties whatsoever.
 
 ## Kernel
 * Linux-mainline 4.1 Kernel with a minimal .config ([AUR](https://aur4.archlinux.org/packages/linux-mainline/))
