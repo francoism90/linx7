@@ -1,0 +1,50 @@
+--- a/sound/soc/intel/atom/sst/sst_acpi.c
++++ b/sound/soc/intel/atom/sst/sst_acpi.c
+@@ -345,6 +345,8 @@
+ static struct sst_machines sst_acpi_bytcr[] = {
+ 	{"10EC5640", "T100", "bytt100_rt5640", NULL, "intel/fw_sst_0f28.bin",
+ 						&byt_rvp_platform_data },
++	{"10EC5640", "LINX7", "bytt100_rt5640", NULL, "intel/fw_sst_0f28.bin",
++						&byt_rvp_platform_data },
+ 	{},
+ };
+
+--- a/sound/soc/codecs/rt5640.c
++++ b/sound/soc/codecs/rt5640.c
+@@ -2125,6 +2125,7 @@
+ 	{ "INT33CA", 0 },
+ 	{ "10EC5640", 0 },
+ 	{ "10EC5642", 0 },
++	{ "AMCR0F28", 0 },
+ 	{ },
+ };
+ MODULE_DEVICE_TABLE(acpi, rt5640_acpi_match);
+
+--- a/sound/soc/intel/boards/byt-rt5640.c
++++ b/sound/soc/intel/boards/byt-rt5640.c
+@@ -125,6 +125,14 @@
+ 		.driver_data = (unsigned long *)(BYT_RT5640_DMIC2_MAP |
+ 						 BYT_RT5640_DMIC_EN),
+ 	},
++	{
++		.callback = byt_rt5640_quirk_cb,
++		.matches = {
++			DMI_MATCH(DMI_SYS_VENDOR, "LINX"),
++			DMI_MATCH(DMI_PRODUCT_NAME, "LINX7"),
++		},
++		.driver_data = (unsigned long *)BYT_RT5640_IN1_MAP,
++	},
+ 	{}
+ };
+ 
+--- a/sound/soc/intel/common/sst-acpi.c
++++ b/sound/soc/intel/common/sst-acpi.c
+@@ -258,7 +258,7 @@
+ 	.resindex_lpe_base = 0,
+ 	.resindex_pcicfg_base = 1,
+ 	.resindex_fw_base = 2,
+-	.irqindex_host_ipc = 5,
++	.irqindex_host_ipc = 0,
+ 	.sst_id = SST_DEV_ID_BYT,
+ 	.resindex_dma_base = -1,
+ };

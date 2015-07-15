@@ -1,0 +1,22 @@
+--- a/drivers/acpi/ec.c
++++ b/drivers/acpi/ec.c
+@@ -1376,6 +1376,7 @@
+ 
+ static const struct acpi_device_id ec_device_ids[] = {
+ 	{"PNP0C09", 0},
++	{"PNP0C0A", 0},
+ 	{"", 0},
+ };
+ 
+@@ -1460,6 +1461,11 @@
+ 	{
+ 	ec_clear_on_resume, "Samsung hardware", {
+ 	DMI_MATCH(DMI_SYS_VENDOR, "SAMSUNG ELECTRONICS CO., LTD.")}, NULL},
++	{
++	ec_validate_ecdt, "LINX7", {
++	DMI_MATCH(DMI_SYS_VENDOR, "LINX"),
++	DMI_MATCH(DMI_PRODUCT_NAME, "LINX7"),}, NULL},
++	{
+ 	{},
+ };
+ 
