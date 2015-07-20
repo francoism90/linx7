@@ -21,20 +21,20 @@ source=("https://www.kernel.org/pub/linux/kernel/v4.x/testing/${_srcname}.tar.xz
         # standard config files for mkinitcpio ramdisk
         'linux.preset'
         'change-default-console-loglevel.patch'
-		'rpmb-init-fix.patch'
+	'rpmb-init-fix.patch'
         'sdhci-pm.patch'
         'sst-address-acpi.patch'
         'add-bat-acpi.patch')
 sha256sums=('3c25a604c6f4cec44506eb6575f818b7a0e068d4dad67ba1315234a46d380f19'
             'SKIP'
-            '86040643a9f6070697f72946991d370d0944ac3bf7bebbbb127c6cc9417094dc'
-            '86040643a9f6070697f72946991d370d0944ac3bf7bebbbb127c6cc9417094dc'
-            'aad791c373def5e73fb816034f6a811e73dbf072a64f26aa316baab6706f5ea9'
+            '851624320a0cba4dcf9b5e2a033adb4b2ceff7fe187c4d7066dea2d1daa4da08'
+            '851624320a0cba4dcf9b5e2a033adb4b2ceff7fe187c4d7066dea2d1daa4da08'
+            '026fb1e5af18ab4de8cf9f73eda2f34beaa54b7270665ff6aa4cf8f74fe7b894'
             '71aecb98a8e05fdd2c7a603f4fbe55c1e51c93ab7c8c531595bd92d96f68ef72'
             'd56c0806c92aed73a9d86384df404d4b54907f4b3e77d0c6f79a254b1f804378'
             'a90e2c7072c6447990d473a9c0ecaa37435d2faf8a874cfd558143e89ce47fab'
             '675072056a6d577a79c068a9eba1f5c531bca8a7ec403752e8b9e4f38d4ce7c1'
-            '8009d2b23a4c1ac23522c365f6808ba7c8e8e55d64321ef1ae5b972389aea70b')
+            '07bd0232af429723ab0fdc2c753fcbb585cc79f58f0c6d687ce3997b6f7acfb1')
 validpgpkeys=(
               'ABAF11C65A2970B130ABE3C479BE3E4300411886' # Linus Torvalds
               '647F28654894E3BD457199BE38DBBDC86092693E' # Greg Kroah-Hartman
@@ -50,17 +50,19 @@ prepare() {
 
   # add latest fixes from stable queue, if needed
   # http://git.kernel.org/?p=linux/kernel/git/stable/stable-queue.git
+  
+  # linx7 patches
+  patch -Np1 -i "${srcdir}/rpmb-init-fix.patch"
+  patch -Np1 -i "${srcdir}/sdhci-pm.patch"
+  
+  # unstable patches
+  #patch -Np1 -i "${srcdir}/sst-address-acpi.patch"
+  #patch -Np1 -i "${srcdir}/add-bat-acpi.patch"
 
   # set DEFAULT_CONSOLE_LOGLEVEL to 4 (same value as the 'quiet' kernel param)
   # remove this when a Kconfig knob is made available by upstream
   # (relevant patch sent upstream: https://lkml.org/lkml/2011/7/26/227)
   patch -p1 -i "${srcdir}/change-default-console-loglevel.patch"
-  
-  # linx7 patch
-  patch -p1 -i "${srcdir}/rpmb-init-fix.patch"
-  patch -p1 -i "${srcdir}/sdhci-pm.patch"
-  patch -p1 -i "${srcdir}/sst-address-acpi.patch"
-  #patch -p1 -i "${srcdir}/add-bat-acpi.patch"
 
   if [ "${CARCH}" = "x86_64" ]; then
     cat "${srcdir}/config.x86_64" > ./.config
@@ -80,14 +82,7 @@ prepare() {
   sed -i '2iexit 0' scripts/depmod.sh
 
   # load configuration
-  # Configure the kernel. Replace the line below with one of your choice.
-  make menuconfig # CLI menu for configuration
-  #make nconfig # new CLI menu for configuration
-  #make xconfig # X-based configuration
-  #make oldconfig # using old config from previous kernel version
-  # ... or manually edit .config
-
-  # get kernel version
+  make menuconfig
   make prepare
   
   # rewrite configuration
@@ -97,7 +92,7 @@ prepare() {
 build() {
   cd "${srcdir}/${_srcname}"
 
-  make ${MAKEFLAGS} V=1 LOCALVERSION= bzImage modules
+  make ${MAKEFLAGS} LOCALVERSION= bzImage modules
 }
 
 _package() {
@@ -231,7 +226,7 @@ _package-headers() {
   # and...
   # http://bugs.archlinux.org/task/11194
   mkdir -p "${pkgdir}/usr/lib/modules/${_kernver}/build/include/config/dvb/"
-  #cp include/config/dvb/*.h "${pkgdir}/usr/lib/modules/${_kernver}/build/include/config/dvb/"
+  cp include/config/dvb/*.h "${pkgdir}/usr/lib/modules/${_kernver}/build/include/config/dvb/"
 
   # add dvb headers for http://mcentral.de/hg/~mrec/em28xx-new
   # in reference to:

@@ -7,16 +7,15 @@
 +	{"PNP0C0A", 0},
  	{"", 0},
  };
- 
-@@ -1460,6 +1461,11 @@
- 	{
- 	ec_clear_on_resume, "Samsung hardware", {
- 	DMI_MATCH(DMI_SYS_VENDOR, "SAMSUNG ELECTRONICS CO., LTD.")}, NULL},
-+	{
-+	ec_validate_ecdt, "LINX7", {
-+	DMI_MATCH(DMI_SYS_VENDOR, "LINX"),
-+	DMI_MATCH(DMI_PRODUCT_NAME, "LINX7"),}, NULL},
-+	{
- 	{},
+
+
+@@ -1460,6 +1460,10 @@
+        {
+        ec_clear_on_resume, "Samsung hardware", {
+        DMI_MATCH(DMI_SYS_VENDOR, "SAMSUNG ELECTRONICS CO., LTD.")}, NULL},
++       {
++       ec_skip_dsdt_scan, "LINX7", {
++       DMI_MATCH(DMI_SYS_VENDOR, "LINX"),
++       DMI_MATCH(DMI_PRODUCT_NAME, "LINX7"),}, NULL},
+        {},
  };
- 
