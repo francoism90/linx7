@@ -21,7 +21,7 @@ source=("https://www.kernel.org/pub/linux/kernel/v4.x/testing/${_srcname}.tar.xz
         # standard config files for mkinitcpio ramdisk
         'linux.preset'
         'change-default-console-loglevel.patch'
-	'rpmb-init-fix.patch'
+        'rpmb-init-fix.patch'
         'sdhci-pm.patch'
         'sst-address-acpi.patch'
         'add-bat-acpi.patch')
