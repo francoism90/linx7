@@ -2,10 +2,10 @@
 # Maintainer: Tobias Powalowski <tpowa@archlinux.org>
 # Maintainer: Thomas Baechler <thomas@archlinux.org>
 
-pkgbase=linux               # Build stock -ARCH kernel
-_srcname=linux-4.2-rc2
-_patchname=4.2-rc2
-pkgver=4.2rc2
+pkgbase=linux-mainline               # Build stock -ARCH kernel
+_srcname=linux-4.2-rc5
+_patchname=4.2-rc5
+pkgver=4.2rc5
 pkgrel=1
 arch=('i686' 'x86_64')
 url="http://www.kernel.org/"
@@ -21,20 +21,21 @@ source=("https://www.kernel.org/pub/linux/kernel/v4.x/testing/${_srcname}.tar.xz
         # standard config files for mkinitcpio ramdisk
         'linux.preset'
         'change-default-console-loglevel.patch'
+        'add-bat-acpi.patch'
         'rpmb-init-fix.patch'
         'sdhci-pm.patch'
-        'sst-address-acpi.patch'
-        'add-bat-acpi.patch')
-sha256sums=('3c25a604c6f4cec44506eb6575f818b7a0e068d4dad67ba1315234a46d380f19'
+        'sst-address-acpi.patch'  
+        )
+sha256sums=('207b05ed6eedaacebedb3f4c949508ebdf40a7fcf371fb3c28188f62637923c7'
             'SKIP'
-            '851624320a0cba4dcf9b5e2a033adb4b2ceff7fe187c4d7066dea2d1daa4da08'
-            '851624320a0cba4dcf9b5e2a033adb4b2ceff7fe187c4d7066dea2d1daa4da08'
-            '026fb1e5af18ab4de8cf9f73eda2f34beaa54b7270665ff6aa4cf8f74fe7b894'
-            '71aecb98a8e05fdd2c7a603f4fbe55c1e51c93ab7c8c531595bd92d96f68ef72'
+            '567570f96678d6ba083d84e60f7527f807e9cc14380a2f7206290ee63f2b080a'
+            '567570f96678d6ba083d84e60f7527f807e9cc14380a2f7206290ee63f2b080a'
+            'f0d90e756f14533ee67afda280500511a62465b4f76adcc5effa95a40045179c'
+            '1256b241cd477b265a3c2d64bdc19ffe3c9bbcee82ea3994c590c2c76e767d99'
+            '07bd0232af429723ab0fdc2c753fcbb585cc79f58f0c6d687ce3997b6f7acfb1'
             'd56c0806c92aed73a9d86384df404d4b54907f4b3e77d0c6f79a254b1f804378'
             'a90e2c7072c6447990d473a9c0ecaa37435d2faf8a874cfd558143e89ce47fab'
-            '675072056a6d577a79c068a9eba1f5c531bca8a7ec403752e8b9e4f38d4ce7c1'
-            '07bd0232af429723ab0fdc2c753fcbb585cc79f58f0c6d687ce3997b6f7acfb1')
+            '675072056a6d577a79c068a9eba1f5c531bca8a7ec403752e8b9e4f38d4ce7c1')
 validpgpkeys=(
               'ABAF11C65A2970B130ABE3C479BE3E4300411886' # Linus Torvalds
               '647F28654894E3BD457199BE38DBBDC86092693E' # Greg Kroah-Hartman
@@ -47,18 +48,16 @@ prepare() {
 
   # add upstream patch
   #patch -p1 -i "${srcdir}/patch-${_patchname}"
+  
+  # linx7 patches
+  patch -p1 -i "${srcdir}/rpmb-init-fix.patch"
+  patch -p1 -i "${srcdir}/sdhci-pm.patch"
+  patch -p1 -i "${srcdir}/sst-address-acpi.patch"
+  patch -p1 -i "${srcdir}/add-bat-acpi.patch"
 
   # add latest fixes from stable queue, if needed
   # http://git.kernel.org/?p=linux/kernel/git/stable/stable-queue.git
   
-  # linx7 patches
-  patch -Np1 -i "${srcdir}/rpmb-init-fix.patch"
-  patch -Np1 -i "${srcdir}/sdhci-pm.patch"
-  
-  # unstable patches
-  #patch -Np1 -i "${srcdir}/sst-address-acpi.patch"
-  #patch -Np1 -i "${srcdir}/add-bat-acpi.patch"
-
   # set DEFAULT_CONSOLE_LOGLEVEL to 4 (same value as the 'quiet' kernel param)
   # remove this when a Kconfig knob is made available by upstream
   # (relevant patch sent upstream: https://lkml.org/lkml/2011/7/26/227)
@@ -81,9 +80,15 @@ prepare() {
   # don't run depmod on 'make install'. We'll do this ourselves in packaging
   sed -i '2iexit 0' scripts/depmod.sh
 
-  # load configuration
-  make menuconfig
+  # get kernel version
   make prepare
+  
+  # check modules-db
+  #sudo /usr/bin/modprobed-db recall
+  #make localmodconfig
+  
+  # Configure the kernel
+  make menuconfig
   
   # rewrite configuration
   yes "" | make config >/dev/null
